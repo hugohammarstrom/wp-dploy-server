@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@modules/*": ["src/modules/*"],
+      "@static/*": ["src/static/*"],
+      "@commands/*": ["src/commands/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

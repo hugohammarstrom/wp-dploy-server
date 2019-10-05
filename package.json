@@ -1,0 +1,30 @@
+{
+  "name": "wp-dploy-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel -d build src",
+    "pkg": "npm run build && pkg build/index.js --out-path bin"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/node": "^7.6.2",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "babel-plugin-module-resolver": "^3.2.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.6.2",
+    "chalk": "^2.4.2",
+    "commander": "^3.0.2",
+    "download": "^7.1.0",
+    "fs-extra": "^8.1.0",
+    "is-relative-url": "^3.0.0",
+    "node-fetch": "^2.6.0",
+    "symlink-dir": "^3.1.1",
+    "yaml-config": "^0.3.0",
+    "zip-unzip-promise": "^2.1.1"
+  }
+}

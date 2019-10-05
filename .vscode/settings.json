@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "path-intellisense.mappings": {
+    "@modules": "${workspaceRoot}/src/modules",
+    "@static": "${workspaceRoot}/src/static",
+    "@commands": "${workspaceRoot}/src/commands"
+  }
+}
