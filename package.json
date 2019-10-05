@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel -d build src",
-    "pkg": "npm run build && pkg build/index.js --out-path bin"
+    "pkg": "npm run build && npx pkg build/index.js --out-path bin"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.2",
