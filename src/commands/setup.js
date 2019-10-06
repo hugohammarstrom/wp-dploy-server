@@ -25,12 +25,12 @@ export default async function(args) {
   logger.log(`Ensuring that ${dir}/data/wp-uploads exists`);
   await fs.ensureDir(`${dir}/data/wp-uploads`);
 
-  logger.log(`Ensuring that ${dir}/config exists`);
-  await fs.ensureDir(`${dir}/config`);
+  logger.log(`Ensuring that ${dir}/data/config exists`);
+  await fs.ensureDir(`${dir}/data/config`);
 
-  if (!fs.existsSync(`${dir}/config/application.php`)) {
-    logger.log(`Adding application.php to ${dir}/config`);
-    await fs.writeFile(`${dir}/config/application.php`, applicationSample);
+  if (!fs.existsSync(`${dir}/data/config/application.php`)) {
+    logger.log(`Adding application.php to ${dir}/data/config`);
+    await fs.writeFile(`${dir}/data/config/application.php`, applicationSample);
   }
 
   logger.log(`Ensuring that ${dir}/hooks exists`);
