@@ -1,14 +1,11 @@
 import fetch from "node-fetch"
 import config from "@modules/config"
 import isRelativeUrl from 'is-relative-url';
-import download from "download"
-import {unzip} from 'zip-unzip-promise';
 import fs from "fs-extra"
 import logger from "@modules/logger"
 import * as hooks from "@modules/hooks"
 
 import simpleGit from "simple-git/promise"
-import tmp from "tmp"
 
 
 /**
@@ -48,37 +45,6 @@ export const request = function(path, opts={}){
   });
 }
 
-export const download_release = async function({release, dir}){
-  let {tag_name: tag} = release
-
-  if (release){
-    if (fs.existsSync(`${dir}/versions/${tag}`)) {
-      logger.log("Release already downloaded - skipping...")
-      return
-    } else {
-      logger.log("Downloading release")
-      await hooks.run({name: "pre-download", dir})
-    }
-
-    let headers = {}
-    if (config.github && config.github.token){
-      headers.Authorization = `token ${config.github.token}`
-    }
-  
-    await download(release.zipball_url, dir + "/versions", {
-      filename: `${tag}.zip`,
-      headers
-    })
-  
-    await unzip(`${dir}/versions/${tag}.zip`, `${dir}/versions/${tag}-tmp`)
-    let folders = await fs.readdir(`${dir}/versions/${tag}-tmp/`)
-    await fs.move(`${dir}/versions/${tag}-tmp/${folders[0]}`, `${dir}/versions/${tag}`)
-    await fs.remove(`${dir}/versions/${tag}.zip`)
-    await fs.remove(`${dir}/versions/${tag}-tmp`)
-    await hooks.run({name: "post-download", dir})
-  }
-}
-
 export const download_commit = async function({commit, repo, dir}){
   if(!config.github) return logger.error("No github config specified")
   let {username, token} = config.github
@@ -97,20 +63,8 @@ export const download_commit = async function({commit, repo, dir}){
   }
 }
 
-export const get_release_from_tag = async function({tag, repo}){
-  let release;
-  if (tag !== "latest"){
-    release = await request(`/repos/${repo}/releases/tags/${tag}`)
-  } else {
-    release = await request(`/repos/${repo}/releases/${tag}`)
-  }
 
-  if (release){
-    return release
-  } else throw new Error("No release with that tag found")
-}
-
-export const get_commit_from_tag = async function({tag, repo}){
+export const get_commit_from_tag = async function({tag="latest", repo}){
   let commit;
   if (tag === "latest"){
     commit = await request(`/repos/${repo}/commits/master`)
