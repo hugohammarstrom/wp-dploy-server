@@ -7,6 +7,10 @@ import fs from "fs-extra"
 import logger from "@modules/logger"
 import * as hooks from "@modules/hooks"
 
+import simpleGit from "simple-git/promise"
+import tmp from "tmp"
+
+
 /**
  * 
  * @param {RequestInfo} path 
@@ -31,11 +35,13 @@ export const request = function(path, opts={}){
       })
       .then(json => {
         if (response.status !== 200){
+          logger.error(`github.com - ${json.message}`)
           logger.error("Could not make request to github.com - exiting...")
           process.exit(-1)
         } else return resolve(json)
       })
       .catch(err => {
+        console.log(err)
         logger.error("Could not make request to github.com - exiting...")
         process.exit(-1)
       });
@@ -73,6 +79,24 @@ export const download_release = async function({release, dir}){
   }
 }
 
+export const download_commit = async function({commit, repo, dir}){
+  if(!config.github) return logger.error("No github config specified")
+  let {username, token} = config.github
+  if (commit){
+    await fs.ensureDir(`${dir}/versions/`)
+    if (fs.existsSync(`${dir}/versions/${commit.sha}`)) {
+      logger.log("Commit already downloaded - skipping...")
+      return
+    } else {
+      logger.log("Downloading commit")
+      await hooks.run({name: "pre-download", dir})
+    }
+    await simpleGit(`${dir}/versions`).clone(`https://${username}:${token}@github.com/${repo}`, commit.sha, ["--depth", "1"])
+    await fs.remove(`${dir}/versions/${commit.sha}/.git`)
+    await hooks.run({name: "post-download", dir})
+  }
+}
+
 export const get_release_from_tag = async function({tag, repo}){
   let release;
   if (tag !== "latest"){
@@ -84,4 +108,17 @@ export const get_release_from_tag = async function({tag, repo}){
   if (release){
     return release
   } else throw new Error("No release with that tag found")
+}
+
+export const get_commit_from_tag = async function({tag, repo}){
+  let commit;
+  if (tag === "latest"){
+    commit = await request(`/repos/${repo}/commits/master`)
+  } else {
+    commit = await request(`/repos/${repo}/commits/${tag}`)
+  }
+
+  if (commit){
+    return commit
+  } else throw new Error("No commit with that tag found")
 }

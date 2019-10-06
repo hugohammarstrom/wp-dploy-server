@@ -8,6 +8,7 @@ program
   .command('cleanup')
   .description("Cleanup unused versions")
   .option('-s, --site <string>', 'site argument')
+  .allowUnknownOption()
   .action(commands.cleanup);
 
 program
@@ -16,6 +17,7 @@ program
   .option('-s, --site <string>', 'site argument')
   .option('-t, --tag <string>', 'tag argument')
   .option('-c, --cleanup', 'cleanup after deploy')
+  .allowUnknownOption()
   .action(commands.deploy);
 
 program
@@ -23,6 +25,7 @@ program
   .description("Rollback to latest active version")
   .option('-s, --site <string>', 'site argument')
   .option('-c, --cleanup', 'cleanup after deploy')
+  .allowUnknownOption()
   .action(async function(args) {
     if (!args.site){
       if (!args.site) return logger.error("No site specified: use flag '--site'");
@@ -40,12 +43,14 @@ program
   .command('setup')
   .description("Setup site at the desired directory")
   .option('-s, --site <string>', 'site argument')
+  .allowUnknownOption()
   .action(commands.setup);
 
 program
   .command('sites')
   .option("--format <string>", "print as json")
   .description("List all configured sites")
+  .allowUnknownOption()
   .action(commands.sites);
 
 program.parse(process.argv)
