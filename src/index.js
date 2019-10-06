@@ -42,6 +42,12 @@ program
   .option('-s, --site <string>', 'site argument')
   .action(commands.setup);
 
+program
+  .command('sites')
+  .option("--format <string>", "print as json")
+  .description("List all configured sites")
+  .action(commands.sites);
+
 program.parse(process.argv)
 
 // Check the program.args obj
