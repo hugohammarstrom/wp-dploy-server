@@ -140,15 +140,16 @@ function _ref() {
             });
 
           case 35:
-            _logger["default"].success("Version successfully deployed!");
-
             if (!args.cleanup) {
-              _context.next = 39;
+              _context.next = 38;
               break;
             }
 
-            _context.next = 39;
+            _context.next = 38;
             return (0, _cleanup["default"])(args);
+
+          case 38:
+            _logger["default"].success("Version successfully deployed!");
 
           case 39:
           case "end":

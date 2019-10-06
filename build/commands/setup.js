@@ -19,6 +19,8 @@ var _fsExtra = _interopRequireDefault(require("fs-extra"));
 
 var _applicationSample = _interopRequireDefault(require("../static/application-sample"));
 
+var _custom_upload_dir = _interopRequireDefault(require("../static/custom_upload_dir"));
+
 var _hooksReadme = _interopRequireDefault(require("../static/hooks-readme"));
 
 function _default(_x) {
@@ -68,49 +70,60 @@ function _ref() {
             return _fsExtra["default"].ensureDir("".concat(dir, "/data"));
 
           case 12:
-            _logger["default"].log("Ensuring that ".concat(dir, "/data/wp-uploads exists"));
+            _logger["default"].log("Ensuring that ".concat(dir, "/data/uploads exists"));
 
             _context.next = 15;
-            return _fsExtra["default"].ensureDir("".concat(dir, "/data/wp-uploads"));
+            return _fsExtra["default"].ensureDir("".concat(dir, "/data/uploads"));
 
           case 15:
-            _logger["default"].log("Ensuring that ".concat(dir, "/config exists"));
+            _logger["default"].log("Ensuring that ".concat(dir, "/data/config exists"));
 
             _context.next = 18;
-            return _fsExtra["default"].ensureDir("".concat(dir, "/config"));
+            return _fsExtra["default"].ensureDir("".concat(dir, "/data/config"));
 
           case 18:
-            if (_fsExtra["default"].existsSync("".concat(dir, "/config/application.php"))) {
+            if (_fsExtra["default"].existsSync("".concat(dir, "/data/config/application.php"))) {
               _context.next = 22;
               break;
             }
 
-            _logger["default"].log("Adding application.php to ".concat(dir, "/config"));
+            _logger["default"].log("Adding application.php to ".concat(dir, "/data/config"));
 
             _context.next = 22;
-            return _fsExtra["default"].writeFile("".concat(dir, "/config/application.php"), _applicationSample["default"]);
+            return _fsExtra["default"].writeFile("".concat(dir, "/data/config/application.php"), _applicationSample["default"]);
 
           case 22:
+            if (_fsExtra["default"].existsSync("".concat(dir, "/data/config/custom_upload_dir.php"))) {
+              _context.next = 26;
+              break;
+            }
+
+            _logger["default"].log("Adding custom_upload_dir.php to ".concat(dir, "/data/config"));
+
+            _context.next = 26;
+            return _fsExtra["default"].writeFile("".concat(dir, "/data/config/custom_upload_dir.php"), _custom_upload_dir["default"]);
+
+          case 26:
             _logger["default"].log("Ensuring that ".concat(dir, "/hooks exists"));
 
-            _context.next = 25;
+            _context.next = 29;
             return _fsExtra["default"].ensureDir("".concat(dir, "/hooks"));
 
-          case 25:
+          case 29:
             if (_fsExtra["default"].existsSync("".concat(dir, "/hooks/readme.md"))) {
-              _context.next = 29;
+              _context.next = 33;
               break;
             }
 
             _logger["default"].log("Adding readme.md to ".concat(dir, "/hooks"));
 
-            _context.next = 29;
+            _context.next = 33;
             return _fsExtra["default"].writeFile("".concat(dir, "/hooks/readme.md"), _hooksReadme["default"]);
 
-          case 29:
+          case 33:
             _logger["default"].success("Setup successfully completed!");
 
-          case 30:
+          case 34:
           case "end":
             return _context.stop();
         }

@@ -48,9 +48,10 @@ export default async function(args) {
   siteState.history.push(release.tag_name);
   await state.set({ site: site.name, state: siteState });
 
-  logger.success(`Version successfully deployed!`);
-
+  
   if (args.cleanup){
     await cleanup(args)
   }
+  
+  logger.success(`Version successfully deployed!`);
 }
