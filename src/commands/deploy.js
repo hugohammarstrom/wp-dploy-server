@@ -49,17 +49,14 @@ export default async function(args) {
   siteState.history.push(commit.sha);
   await state.set({ site: site.name, state: siteState });
 
-  
-  if (args.cleanup){
+  if (site.max_versions_stored){
     await cleanup({...args, ...{
-      all: true
+      num: site.max_versions_stored
     }})
-  } else {
-    if (site.max_versions_stored){
-      await cleanup({...args, ...{
-        max: site.max_versions_stored
-      }})
-    }
+  } else if (args.cleanup){
+    await cleanup({...args, ...{
+      num: 1
+    }})
   }
   
   logger.success(`Version successfully deployed!`);

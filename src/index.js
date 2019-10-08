@@ -8,7 +8,7 @@ program
   .command('cleanup')
   .description("Cleanup unused versions")
   .option('-s, --site <string>', 'site argument')
-  .option('-m, --max <number>', 'Max number of versions to leave stored')
+  .option('-n, --num <number>', 'Number of versions to leave stored')
   .allowUnknownOption()
   .action(commands.cleanup);
 

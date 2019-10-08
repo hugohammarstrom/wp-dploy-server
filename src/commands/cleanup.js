@@ -4,7 +4,7 @@ import * as state from "@modules/state"
 import fs from "fs-extra";
 
 export default async function(args){
-  let { site: site_name, all=true, max} = args;
+  let { site: site_name, num=1} = args;
 
   if (!site_name) return logger.error("No site specified: use flag '--site'");
   let site = config.sites.find(site => site.name == site_name);
@@ -15,21 +15,12 @@ export default async function(args){
 
   let versions = []
   let {history=[]} = await state.get({ site: site.name });
-  if (all && !max){
-    let current = history[history.length - 1]
+  let historyCommits = history.reverse().unique().reverse()
+  
+  versions = await fs.readdir(`${site.dir}/versions`)
+  historyCommits = historyCommits.filter(commit => versions.includes(commit))
 
-    versions = await fs.readdir(`${site.dir}/versions`)
-    versions = versions.filter(version => version !== current)
-  } else if (max){
-    let historyCommits = history.reverse().unique().reverse()
-    versions = await fs.readdir(`${site.dir}/versions`)
-    historyCommits = historyCommits.filter(commit => versions.includes(commit))
-
-    versions = historyCommits.splice(0, Math.max(historyCommits.length - max, 0))
-  }
-
-
-
+  versions = historyCommits.splice(0, Math.max(historyCommits.length - num, 0))
 
   
   if (versions.length > 0){
