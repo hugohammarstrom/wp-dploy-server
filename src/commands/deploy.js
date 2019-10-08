@@ -51,7 +51,15 @@ export default async function(args) {
 
   
   if (args.cleanup){
-    await cleanup(args)
+    await cleanup({...args, ...{
+      all: true
+    }})
+  } else {
+    if (site.max_versions_stored){
+      await cleanup({...args, ...{
+        max: site.max_versions_stored
+      }})
+    }
   }
   
   logger.success(`Version successfully deployed!`);

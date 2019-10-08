@@ -8,6 +8,7 @@ program
   .command('cleanup')
   .description("Cleanup unused versions")
   .option('-s, --site <string>', 'site argument')
+  .option('-m, --max <number>', 'Max number of versions to leave stored')
   .allowUnknownOption()
   .action(commands.cleanup);
 
@@ -48,7 +49,7 @@ program
 
 program
   .command('sites')
-  .option("--format <string>", "print as json")
+  .option("--format <format>", "(json)")
   .description("List all configured sites")
   .allowUnknownOption()
   .action(commands.sites);
